@@ -13,88 +13,40 @@
 
 function compile(instructions) {
   let registries = []
+  const isNumber = /^-?\d+$/g  
+  const findRegistry = (search) => registries.find(({ name }) => name === search)
+
   for (let i=0; i<instructions.length; i++) {
-    let instruction = instructions[i].split(' ')
-    let command = instruction[0]
-    let paramOne = instruction[1]
-    let paramTwo = instruction[2]
-    if (command === 'MOV') {
-      if(/^-?\d+$/g.test(paramOne)) {
-        let registryExist = registries.find(({name}) => name === paramTwo)
-        if (!registryExist) {
-          registryExist = {
-            name: paramTwo,
-            qty: 0
-          }
-        }
-        registryExist.qty +=  parseInt(paramOne)
-        registries.push(registryExist)
-      }
-      if(/^-?\d+$/g.test(paramOne)) {
-        let registryExist = registries.find(({name}) => name === paramTwo)
-        if (!registryExist) {
-          registryExist = {
-            name: paramTwo,
-            qty: 0
-          }
-        }
-        registryExist.qty +=  parseInt(paramOne)
-        registries.push(registryExist)
+    const [command, paramOne, paramTwo] = instructions[i].split(' ')
+    if (['INC', 'DEC'].includes(command)) {
+      const ind = registries.findIndex(item => item.name === paramOne)
+      if (ind < 0) {
+        registries.push({
+          name: paramOne,
+          qty: 1
+        })
         continue
       }
-      let registryExist = registries.find(({name}) => name === paramTwo)
-      registryExist
+      registries[ind].qty += command === 'INC' ? 1 : -1
       continue
     }
-    if (command === 'JMP') {
-      let registryExist = registries.find(({name}) => name === paramOne)
-      
-      if (registryExist?.qty === 0) {
-        i = paramTwo-1
-      }
-      continue
-    }
-    if (command === 'INC') {
-      let registryExist = registries.find(({name}) => name === paramOne)
-      if (!registryExist) {
-        registryExist = {
-          name: paramOne,
-          qty: 0
-        }
-        registries.push(registryExist)
-      } else {
-        registries = registries.map(value => {
-          if(value.name = paramOne) {
-            value.qty += 1
-          }
-          return value
-        })
-      }
-      continue
-    }
-    if (command === 'DEC') {
-      let registryExist = registries.find(({name}) => name === paramOne)
-      if (!registryExist) {
-        registryExist = {
-          name: paramOne,
-          qty: 0
-        }
-        registries.push(registryExist)
-      } else {
-        registries = registries.map(value => {
-          if(value.name = paramOne) {
-            value.qty -= 1
-          }
-          return value
-        })
-      }
-      continue
-    }
-  }
-  console.log("🚀 ~ compile ~ registries:", registries)
-  return registries.find(registry => registry.name === 'A')?.qty
-}
 
+    const registryParamOne = findRegistry(paramOne)
+    if (command === 'MOV') {
+      if(isNumber.test(paramOne)) {
+        registries.push( {
+          name: paramTwo,
+          qty: parseInt(paramOne)
+        })
+        continue
+      }
+      registries.push({...registryParamOne, name: paramTwo})
+      continue
+    }
+    i = registryParamOne?.qty === 0 ? paramTwo-1 : i
+  } 
+  return registries.find(({name}) => name === 'A')?.qty
+}
 const instructions = [
   'MOV -1 C', // copia -1 al registro 'C',
   'INC C', // incrementa el valor del registro 'C'
@@ -102,4 +54,10 @@ const instructions = [
   'MOV C A', // copia el registro 'C' al registro 'a',
   'INC A' // incrementa el valor del registro 'a'
 ]
+// const instructions = [
+//   'INC A',
+//   'INC A',
+//   'DEC A',
+//   'MOV A B',
+// ]
 console.log(compile(instructions))
