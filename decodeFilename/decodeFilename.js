@@ -11,7 +11,6 @@
 // Tu tarea es implementar una función que reciba un string con el nombre de un archivo codificado y devuelva solo la parte importante: el nombre del archivo y su extensión.
 
 function decodeFilename(filename = '') { 
-  console.log("🚀 ~ decodeFilename ~", filename.slice((filename.indexOf('_')+1), filename.lastIndexOf('.')))
 
   return filename.slice((filename.indexOf('-')), filename.lastIndexOf('.'))
 }

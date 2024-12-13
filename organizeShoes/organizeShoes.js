@@ -7,17 +7,18 @@
 // ¡Ten en cuenta que puedes tener más de una zapatilla emparejada del mismo tamaño!
 
 
+
 function organizeShoes(shoes) {
   const LEFT = "I"
   const RIGHT = "R"
   const organizedResult = []
   const accumulator = {}
 
-  shoes.forEach((value, index) => {
+  shoes.forEach((value) => {
     const size = value.size
     const type = value.type
 
-    if (accumulator[size] === undefined) {
+    if (accumulator?.[size]) {
       accumulator[size] = {
         [LEFT]: 0,
         [RIGHT]: 0

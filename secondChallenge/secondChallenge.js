@@ -5,17 +5,14 @@
 function createFrame(names) {
     const border = '*'
     const padding = 4
-    
     const  lengthLimit = [...names].sort(( a, b) => a.length - b.length ).at(-1).length
+    const  borderLimit = border.repeat(lengthLimit + padding);
     let  namesReduced = "" 
     names.forEach((name, index) => { 
-        namesReduced += `* ${name}${" ".repeat(lengthLimit - name.length)} *`
-        if(names.length !== index + 1 ) namesReduced += '\n'
+        namesReduced += `* ${name}${" ".repeat(lengthLimit - name.length)} * ${names.length !== index + 1 ? '\n' : ''}`
     })
     
-    const  borderLimit = border.repeat(lengthLimit + padding);
     return`${borderLimit}\n${namesReduced}\n${borderLimit}`;
 }
-
 var nameList = ['abcdaaa', 'abcde', 'abcd'];
 console.log(createFrame(nameList));

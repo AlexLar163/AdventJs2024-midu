@@ -5,10 +5,7 @@
 // enteros (que pueden incluir duplicados) y devuelva una nueva lista sin duplicados, 
 // ordenada en orden ascendente.
 function prepareGifts(gifts) {
-    var finallyGiftList = gifts.filter(function (gift, index) {
-        return gifts.indexOf(gift) === index;
-    });
-    return finallyGiftList.sort(function (a, b) { return a - b; });
+    return Array.from(new Set(gifts.sort((a, b) => a - b)))
 }
 var giftList = [1000, 500, 300, 2000, 10000, 7, 500];
 var resultList = prepareGifts(giftList);
