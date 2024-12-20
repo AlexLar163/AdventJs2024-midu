@@ -21,7 +21,7 @@
 // [x, y]: si el robot no vuelve a estar justo donde empezó, devolver la posición donde se detuvo
 function isRobotBack(moves) { 
   const board = [0, 0]
-  moves = moves.replace('*', moves.charAt(i+1))
+  moves = moves.replace('*', moves)
   
   for(let i=0; i<moves.length; i++) {
     let move = moves.charAt(i)
